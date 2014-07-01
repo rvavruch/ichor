@@ -79,6 +79,7 @@ except:
 year = int(date[0:4]) # only need first 4 characters, ie. the year
 
 mp3dirname = "%s/[%d] %s" % (artist, year, albumTitle)
+mp3dirname.replace("/", "_")
 
 try:
     os.makedirs(mp3dirname)
@@ -117,12 +118,14 @@ for wav in ll:
         artist = trackData['recording']['artist-credit-phrase'].replace('"', "\\\"").replace("'", "\'")
         trackNum = int(trackData['number'])
         title = trackData['recording']['title'].replace('"', "\\\"").replace("'", "\'")
+        fsSafeArtist = artist.replace("/", "_")
+        fsSafeTitle = title.replace("/", "_")
         
         # if not single artist put track number in front
         if isSingleArtist:
-            trackName = "%s - %02d - %s.mp3" % (artist, trackNum, title)
+            trackName = "%s - %02d - %s.mp3" % (fsSafeArtist, trackNum, fsSafeTitle)
         else:
-            trackName = "%02d - %s - %s.mp3" % (trackNum, artist, title)
+            trackName = "%02d - %s - %s.mp3" % (trackNum, fsSafeArtist, fsSafeTitle)
             
         lamecmd = 'lame --preset standard --ta "%s" --tn %d --tt "%s" --tl "%s" --ty %d --tc "%s" "%s" "%s"' % (artist, trackNum, title, albumTitle, year, comment, wav, trackName)
         
