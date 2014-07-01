@@ -40,7 +40,7 @@ Assuming Python 2.7+ is installed
 
 ## Usage
 1. Insert CD.
-2. Open a terminal and navigate to the directory where the MP3s should be saved to (see File naming conventions below).
+2. Open a terminal and navigate to the directory where the MP3s should be saved to (see [File naming conventions](https://github.com/rvavruch/ichor/blob/master/README.md#file-naming-conventions--directory-structure)).
 3. Run Ichor:
 
     ````bash
@@ -63,10 +63,10 @@ Ichor will create the following directory structure and filenames:
 ````
 For example:
 ````bash
-The Beatles/[1964] A Hard Day's Night/The Beatles - 07 - Can't Buy Me Love.mp3
+The Beatles/[1964] A Hard Day\'s Night/The Beatles - 07 - Can\'t Buy Me Love.mp3
 ````
 
-If there are multiple artits the track filenames will change to have the track number first:
+If there are multiple artists the track filenames will change to have the track number first:
 ````bash
 %track number% - %artist name% - %track title%.mp3
 ````
