@@ -62,8 +62,8 @@ Ichor will create the following directory structure and filenames:
 %artist name%/[%album year%] %album title%/%artist name% - %track number% - %track title%.mp3
 ````
 For example:
-````bash
-The Beatles/[1964] A Hard Day\'s Night/The Beatles - 07 - Can\'t Buy Me Love.mp3
+````
+The Beatles/[1964] A Hard Day's Night/The Beatles - 07 - Can't Buy Me Love.mp3
 ````
 
 If there are multiple artists the track filenames will change to have the track number first:
