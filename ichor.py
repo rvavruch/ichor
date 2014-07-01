@@ -91,7 +91,7 @@ if numberOfReleases == 0:
 elif numberOfReleases > 1:
     print "Multiple releases, do something."
     print releaseList
-    sys.exit(0)
+    selectedRelease = releaseList[0]
 else:
     selectedRelease = releaseList[0]
 
