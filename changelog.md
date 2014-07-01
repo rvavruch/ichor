@@ -1,7 +1,7 @@
 # 2.1.0
 * Download cover art if available
 * Display script greeting
-* Display album art and title
+* Display album artist and title
 
 # 2.0.0
 * Complete rewrite to use new MusicBrainz API [python-musicbrainzngs](https://github.com/alastair/python-musicbrainzngs)
