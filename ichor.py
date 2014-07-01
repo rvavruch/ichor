@@ -6,8 +6,8 @@ import musicbrainzngs
 
 
 # Script details
-scriptName = "Ichor" # An inflexible CD ripper
-scriptVersion = '2.1.0' # updated for new MusicBrainz API
+scriptName = "Ichor" # The inflexible CD ripper
+scriptVersion = '2.1.1' # see changelog.md for details
 scriptURL = 'https://github.com/rvavruch/ichor'
 print "%s %s (%s) thinks you're neat!" % (scriptName, scriptVersion, scriptURL)
 
@@ -162,4 +162,3 @@ status = subprocess.call(shlex.split("eject"))
 if status != 0:
     print "Failed to eject!"
     sys.exit(1)
-
