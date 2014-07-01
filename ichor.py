@@ -67,7 +67,9 @@ isSingleArtist = not(numberOfArtists > 1 or selectedRelease['artist-credit'][0][
 
 # create mp3 directory and change into it
 artist = selectedRelease['artist-credit'][0]['artist']['sort-name']
+fsSafeArtist = artist.replace("/", "_")
 albumTitle = selectedRelease['title']
+fsSafeAlbumTitle = albumTitle.replace("/", "_")
 
 print "Ripping: %s - %s\n" % (artist, albumTitle) # just for interests sake
 
@@ -78,8 +80,8 @@ except:
 
 year = int(date[0:4]) # only need first 4 characters, ie. the year
 
-mp3dirname = "%s/[%d] %s" % (artist, year, albumTitle)
-mp3dirname.replace("/", "_")
+
+mp3dirname = "%s/[%d] %s" % (fsSafeArtist, year, fsSafeAlbumTitle)
 
 try:
     os.makedirs(mp3dirname)
@@ -118,7 +120,6 @@ for wav in ll:
         artist = trackData['recording']['artist-credit-phrase'].replace('"', "\\\"").replace("'", "\'")
         trackNum = int(trackData['number'])
         title = trackData['recording']['title'].replace('"', "\\\"").replace("'", "\'")
-        fsSafeArtist = artist.replace("/", "_")
         fsSafeTitle = title.replace("/", "_")
         
         # if not single artist put track number in front
@@ -161,3 +162,4 @@ status = subprocess.call(shlex.split("eject"))
 if status != 0:
     print "Failed to eject!"
     sys.exit(1)
+
