@@ -1,53 +1,15 @@
 #!/usr/bin/python
-'''
-Python 2.7.5+ (default, Feb 27 2014, 19:37:08)
-
-
-LAME has certain VBR presets ranging from V0 to V9. V0 is the highest quality VBR preset and V9 is the lowest quality VBR preset. The two most common VBR presets on What.CD are V0 (with a target bitrate of 245kbps) and V2 (with a target bitrate of 190kbps). V2 is the lowest quality LAME VBR preset allowed on What.CD for music torrents.
-
-https://python-musicbrainzngs.readthedocs.org/en/latest/usage/
-http://python-discid.readthedocs.org/en/latest/usage/
-
-# Requirements
-* cdparanoia
-* lame
-
-# http://musicbrainz.org/ws/2/discid/LN86inPliqcICFmtOVHbS68sX40-?inc=recordings+artist-credits
-# http://musicbrainz.org/ws/2/release/b623079c-a973-463f-b20b-d06d2637d15d?inc=recordings+artist-credits
-# http://musicbrainz.org/ws/2/release/9c922382-93e7-4630-a8ee-c8c5793fb5af?inc=recordings+artist-credits
-https://github.com/alastair/python-musicbrainzngs
-
-
-# Installation instructions
-pip install discid
-pip install musicbrainzngs
-
-'''
-
-'''
-# Check if a Python module exists, and if so import it
-# Can be used multiple times without any performance hit because modules are only imported once
-# -- http://stackoverflow.com/a/5847944/204614
-def module_exists (module_name):
-    try:
-        __import__(module_name)
-    except ImportError:
-        return False
-    else:
-        return True
-'''
-
 import sys, subprocess, shlex, os
 
 import discid
 import musicbrainzngs
-#import mutagen.easyid3
 
 
 # Script details
 scriptName = "Ichor" # An inflexible CD ripper
-scriptVersion = '2.0.0' # updated for new MusicBrainz API
+scriptVersion = '2.1.0' # updated for new MusicBrainz API
 scriptURL = 'https://github.com/rvavruch/ichor'
+print "%s %s (%s) thinks you're neat!" % (scriptName, scriptVersion, scriptURL)
 
 
 
@@ -86,10 +48,10 @@ numberOfReleases = len(releaseList)
 
 if numberOfReleases == 0:
     print "This CD is not yet in the MusicBrainz database."
-    print "To continue first add it using:", disc.submission_url
+    print "To continue please add it using the following link:", disc.submission_url
     sys.exit(0)
 elif numberOfReleases > 1:
-    print "Multiple releases, do something."
+    print "Multiple releases, do something!"
     print releaseList
     selectedRelease = releaseList[0]
 else:
@@ -106,6 +68,8 @@ isSingleArtist = not(numberOfArtists > 1 or selectedRelease['artist-credit'][0][
 # create mp3 directory and change into it
 artist = selectedRelease['artist-credit'][0]['artist']['sort-name']
 albumTitle = selectedRelease['title']
+
+print "Ripping: %s - %s\n" % (artist, albumTitle) # just for interests sake
 
 try:
     date = selectedRelease['release-event-list'][0]['date']
@@ -134,8 +98,10 @@ status = subprocess.call(shlex.split(command))
 
 if status != 0:
     print "Ripping failed!"
+    print command
     sys.exit(1)
     
+
 
 # Convert all wavs to mp3, and if successful delete wav file
 ll = sorted(os.listdir("."))
@@ -167,20 +133,23 @@ for wav in ll:
             os.remove(wav)
         else:
             print "Encoding failed!"
+            print lamecmd
             sys.exit(1)
-        
+
+
 
 # Download cover art if available
 if selectedRelease['cover-art-archive']['front'] != 'false':
-    print 'Download cover art!'
-'''
-    print selectedRelease['id']
-    print musicbrainzngs
-    coverArt = musicbrainzngs.get_release_group_image_list(selectedRelease['id'])
-    #data = musicbrainzngs.get_image_list(selectedRelease['id'])
-    print coverArt
-    exit()
-'''
+    frontURL = "http://coverartarchive.org/release/%s/front" % (selectedRelease['id'])
+    wgetcmd = "wget --progress=bar --output-document=Folder.jpg %s" % (frontURL)
+    status = subprocess.call(shlex.split(wgetcmd))
+    
+    # if not success
+    if status != 0:
+        print "Cover art download failed"
+        print wgetcmd
+        sys.exit(1)
+
 
 
 # Done - eject CD to indicate process finished
@@ -188,5 +157,4 @@ status = subprocess.call(shlex.split("eject"))
 
 if status != 0:
     print "Failed to eject!"
-    sys.exit(1)        
-
+    sys.exit(1)
