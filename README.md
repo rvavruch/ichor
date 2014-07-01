@@ -8,35 +8,40 @@ It fetches album and track details from [MusicBrainz](https://musicbrainz.org), 
 It is inflexible and single minded in it's task. It takes no parameters, it has no options. Just run it and it does it's thing.
 
 ## Ichor is not for you if ...
-* Want to rip homemade compilation CDs (Ichor requires the album details to be on MusicBrainz)
-* You like tweaking settings
+* Want to rip homemade compilation CDs (Ichor requires the album details to be on MusicBrainz).
+* You like tweaking settings.
 
 ## Requirements
-* Internet connection (fetches data from MusicBrainz and Cover Art Archive)
-* Linux (tested on Linux Mint 16 Petra)
-* Harddrive space ~900MBs (depends on the size of the CD to be ripped - wav files will be ripped first, then deleted as they are encoded)
-* Python 2.7 (tested on Python 2.7.5)
-* MusicBrainz Python modules: [musicbrainzngs](http://python-musicbrainzngs.readthedocs.org/en/latest/), [discid](http://python-discid.readthedocs.org/en/latest/)
-* cdparanoia
-* LAME
+* Internet connection (fetches data from MusicBrainz and Cover Art Archive).
+* Linux (tested on Linux Mint 16 Petra).
+* Harddrive space ~900MBs (depends on the size of the CD to be ripped - wav files will be ripped first, then deleted as they are encoded).
+* Python 2.7 (tested on Python 2.7.5).
+* MusicBrainz Python modules: [musicbrainzngs](http://python-musicbrainzngs.readthedocs.org/en/latest/), [discid](http://python-discid.readthedocs.org/en/latest/).
+* cdparanoia.
+* LAME.
 
 ## Installation on Linux Mint / Ubuntu
 Assuming Python 2.7+ is installed
 
-1. Install pip http://pip.readthedocs.org/en/latest/installing.html 
-2. Install Python modules (run as root)
+1. Install pip http://pip.readthedocs.org/en/latest/installing.html
+2. Install Python modules (run as root):
 
     ````bash
     pip install discid
     pip install musicbrainzngs
     ````
     
-3. Install cdparanoia and lame (run as root)
+3. Install cdparanoia and lame (run as root):
 
     ````bash
     aptitude install cdparanoia lame
     ````
-4. Download [ichor.py](https://raw.githubusercontent.com/rvavruch/ichor/master/ichor.py)
+4. Download and save [ichor.py](https://raw.githubusercontent.com/rvavruch/ichor/master/ichor.py)
+5. Make _ichor.py_ executable:
+
+    ````bash
+    chmod a+x ichor.py
+    ````
 
 ## Usage
 1. Insert CD.
