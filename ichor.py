@@ -7,7 +7,7 @@ import musicbrainzngs
 
 # Script details
 scriptName = "Ichor" # The inflexible CD ripper
-scriptVersion = '2.1.1' # see changelog.md for details
+scriptVersion = '2.1.2' # see changelog.md for details
 scriptURL = 'https://github.com/rvavruch/ichor'
 print "%s %s (%s) thinks you're neat!" % (scriptName, scriptVersion, scriptURL)
 
@@ -103,7 +103,7 @@ if status != 0:
     print "Ripping failed!"
     print command
     sys.exit(1)
-    
+ 
 
 
 # Convert all wavs to mp3, and if successful delete wav file
@@ -128,7 +128,9 @@ for wav in ll:
         else:
             trackName = "%02d - %s - %s.mp3" % (trackNum, fsSafeArtist, fsSafeTitle)
             
-        lamecmd = 'lame --preset standard --ta "%s" --tn %d --tt "%s" --tl "%s" --ty %d --tc "%s" "%s" "%s"' % (artist, trackNum, title, albumTitle, year, comment, wav, trackName)
+        lamecmd = 'lame --preset standard --ta "%s" --tn %d --tt "%s" --tl "%s" --ty "%d" --tc "%s" "%s" "%s"' % (artist, trackNum, title, albumTitle, year, comment, wav, trackName)
+        
+        lamecmd = lamecmd.encode('utf8')
         
         status = subprocess.call(shlex.split(lamecmd))
         
