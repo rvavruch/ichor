@@ -5,7 +5,9 @@ Ichor is a Linux commandline Python script that encodes CDs to high quality MP3s
 
 It fetches album and track details from [MusicBrainz](https://musicbrainz.org), rips the CD with [cdparanoia](https://www.xiph.org/paranoia/), and encodes the result to MP3 with [LAME](http://lame.sf.net). If available it downloads cover art from [Cover Art Archive](https://coverartarchive.org/).
 
-It is inflexible and single minded in it's task. It takes no parameters, it has no options. Just run it and it does it's thing.
+It is inflexible and single minded in it's task. It takes no parameters, it has no options.
+
+*Just run it, when the CD ejects it is done.*
 
 ## Ichor is not for you if ...
 * Want to rip homemade compilation CDs (Ichor requires the album details to be on MusicBrainz).
