@@ -1,5 +1,8 @@
+# 2.1.2
+* Added support for UTF8 track titles
+
 # 2.1.1
-* Made filenames and directories a little mow file system friendly
+* Made filenames and directories a little more file system friendly
 
 # 2.1.0
 * Download cover art if available
