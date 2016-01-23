@@ -7,7 +7,7 @@ import musicbrainzngs
 
 # Script details
 scriptName = "Ichor" # The inflexible CD ripper
-scriptVersion = '2.2.0' # see changelog.md for details
+scriptVersion = '2.3.0' # see changelog.md for details
 scriptURL = 'https://github.com/rvavruch/ichor'
 print "%s %s (%s) thinks you're neat!" % (scriptName, scriptVersion, scriptURL)
 
@@ -51,9 +51,45 @@ if numberOfReleases == 0:
     print "To continue please add it using the following link:", disc.submission_url
     sys.exit(0)
 elif numberOfReleases > 1:
-    print "Multiple releases, do something!"
-    print releaseList
-    selectedRelease = releaseList[0]
+    # if there are multiple releases allow the user to choose one
+    print
+    print "Multiple releases, choose one:\n"
+
+    releaseIdx = 1
+    for release in releaseList:
+        print '#' + str(releaseIdx)
+        print "Artist:", release['artist-credit-phrase']
+        print "Title:", release['title']
+        print "Country:", release['country']
+        print "Date:", release['date']
+        if release['cover-art-archive']['front'] != 'false':
+            print "Cover art: Yes"
+        else:
+            print "Cover art: No"
+        print "Barcode:", release['barcode']
+        try:
+            release['disambiguation']
+        except KeyError:
+            release['disambiguation'] = 'None'
+        
+        if release['disambiguation'] != 'None':
+            print "Disambiguation:", release['disambiguation']
+        
+        releaseIdx += 1
+        print
+    
+    releaseChoice = 0
+    releaseOptions = range(1, numberOfReleases+1)
+    
+    while releaseChoice not in releaseOptions:
+        userInput = raw_input('Enter release number [1-' + str(numberOfReleases) + ']: ')
+        try:
+            releaseChoice = int(userInput)
+        except:
+            releaseChoice = 0
+    
+    releaseChoice -= 1
+    selectedRelease = releaseList[releaseChoice]
 else:
     selectedRelease = releaseList[0]
 
