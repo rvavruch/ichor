@@ -7,7 +7,7 @@ import musicbrainzngs
 
 # Script details
 scriptName = "Ichor" # The inflexible CD ripper
-scriptVersion = '2.3.0' # see changelog.md for details
+scriptVersion = '2.2.0' # see changelog.md for details
 scriptURL = 'https://github.com/rvavruch/ichor'
 print "%s %s (%s) thinks you're neat!" % (scriptName, scriptVersion, scriptURL)
 
