@@ -103,7 +103,7 @@ if status != 0:
     print "Ripping failed!"
     print command
     sys.exit(1)
- 
+
 
 
 # Convert all wavs to mp3, and if successful delete wav file
@@ -113,15 +113,22 @@ comment = "Ripped with %s v%s (%s)" % (scriptName, scriptVersion, scriptURL)
 tracks = selectedRelease['medium-list'][0]['track-list']
 i = 0
 for wav in ll:
-    if os.path.isfile(wav):
+    if wav.endswith('cdda.wav') and os.path.isfile(wav):
+    	
         trackData = tracks[i]
-        i+=1
-
-        artist = trackData['recording']['artist-credit-phrase'].replace('"', "\\\"").replace("'", "\'")
         trackNum = int(trackData['number'])
+        artist = trackData['recording']['artist-credit-phrase'].replace('"', "\\\"").replace("'", "\'")
         title = trackData['recording']['title'].replace('"', "\\\"").replace("'", "\'")
-        fsSafeTitle = title.replace("/", "_")
+
+        # if unknown pregap, compress it but don't use track names
+        if wav != 'track00.cdda.wav' or (wav == 'track00.cdda.wav' and trackNum == 0):
+            i+=1
+        else:
+            trackNum = 0
+            title = 'Pregap'
         
+        fsSafeTitle = title.replace("/", "_")
+
         # if not single artist put track number in front
         if isSingleArtist:
             trackName = "%s - %02d - %s.mp3" % (fsSafeArtist, trackNum, fsSafeTitle)
@@ -129,9 +136,9 @@ for wav in ll:
             trackName = "%02d - %s - %s.mp3" % (trackNum, fsSafeArtist, fsSafeTitle)
             
         lamecmd = 'lame --preset standard --ta "%s" --tn %d --tt "%s" --tl "%s" --ty "%d" --tc "%s" "%s" "%s"' % (artist, trackNum, title, albumTitle, year, comment, wav, trackName)
-        
+
         lamecmd = lamecmd.encode('utf8')
-        
+
         status = subprocess.call(shlex.split(lamecmd))
         
         # if success delete wav file
