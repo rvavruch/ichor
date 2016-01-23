@@ -60,6 +60,7 @@ Assuming Python 2.7+ is installed
     ````
     
     1. If the CD is not recognised by MusicBrainz, Ichor will quit and print a URL you can use to add it to MusicBrainz. Once the CD has been added to MusicBrainz, run Ichor again.
+    2. If there are multiple releases for the CD found, you will be asked to choose one. Recommedation is to choose one with cover art if everything else is the same.
 4. Once Ichor is finished it will eject the CD.
 
 ## File naming conventions & directory structure
