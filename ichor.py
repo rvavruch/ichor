@@ -39,6 +39,23 @@ print "%s %s (%s) thinks you're neat!" % (scriptName, scriptVersion, scriptURL)
 
 
 
+# Functions
+def getIfSet (key, data, default):
+    "Return the default if the key does not exist in the data"
+    try:
+        return data['key']
+    except KeyError:
+        return default
+        
+def printIfSet (prefix, key, data, default):
+    "Print the line only if the data is not null"
+    data = getIfSet(key, data, default)
+    
+    if data != default:
+        print prefix, data
+
+
+
 # get Audio CD details
 try:
     disc = discid.read()        # reads from default device
@@ -50,6 +67,7 @@ except discid.DiscError, e:
 
 
 # try to find Audio CD match on MusicBrainz
+print "\nFetching release data for CD ..."
 musicbrainzngs.set_useragent(scriptName, scriptVersion, scriptURL)
 
 try:
@@ -84,28 +102,25 @@ elif numberOfReleases > 1:
     releaseIdx = 1
     for release in releaseList:
         print '#' + str(releaseIdx)
-        print "Artist:", release['artist-credit-phrase']
-        print "Title:", release['title']
-        print "Country:", release['country']
-        print "Date:", release['date']
+        print "Artist:", release['artist-credit-phrase'].encode('utf8')
+        print "Title:", release['title'].encode('utf8')
+        
+        printIfSet("Country:", 'country', release, 'Unknown')
+        printIfSet("Date:", 'date', release, '0000')
+            
         if release['cover-art-archive']['front'] != 'false':
             print "Cover art: Yes"
         else:
             print "Cover art: No"
-        try:
-            release['disambiguation']
-        except KeyError:
-            release['disambiguation'] = 'None'
-        
-        if release['disambiguation'] != 'None':
-            print "Disambiguation:", release['disambiguation']
+            
+        printIfSet("Disambiguation:", 'disambiguation', release, 'None')
         
         releaseIdx += 1
         print
     
     releaseChoice = 0
     releaseOptions = range(1, numberOfReleases+1)
-    
+
     while releaseChoice not in releaseOptions:
         userInput = raw_input('Enter release number [1-' + str(numberOfReleases) + ']: ')
         try:
