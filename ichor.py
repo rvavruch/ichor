@@ -66,7 +66,6 @@ elif numberOfReleases > 1:
             print "Cover art: Yes"
         else:
             print "Cover art: No"
-        print "Barcode:", release['barcode']
         try:
             release['disambiguation']
         except KeyError:
@@ -90,6 +89,7 @@ elif numberOfReleases > 1:
     
     releaseChoice -= 1
     selectedRelease = releaseList[releaseChoice]
+    print
 else:
     selectedRelease = releaseList[0]
 
@@ -142,6 +142,21 @@ if status != 0:
 
 
 
+# Download cover art if available
+hasCoverArt = (selectedRelease['cover-art-archive']['front'] != 'false')
+if hasCoverArt:
+    frontURL = "http://coverartarchive.org/release/%s/front" % (selectedRelease['id'])
+    wgetcmd = "wget --progress=bar --output-document=Folder.jpg %s" % (frontURL)
+    status = subprocess.call(shlex.split(wgetcmd))
+    
+    # if not success
+    if status != 0:
+        print "Cover art download failed"
+        print wgetcmd
+        sys.exit(1)
+
+
+
 # Convert all wavs to mp3, and if successful delete wav file
 ll = sorted(os.listdir("."))
 
@@ -173,6 +188,9 @@ for wav in ll:
             
         lamecmd = 'lame --preset standard --ta "%s" --tn %d --tt "%s" --tl "%s" --ty "%d" --tc "%s" "%s" "%s"' % (artist, trackNum, title, albumTitle, year, comment, wav, trackName)
 
+        if hasCoverArt:
+            lamecmd = lamecmd + ' --ti Folder.jpg'
+            
         lamecmd = lamecmd.encode('utf8')
 
         status = subprocess.call(shlex.split(lamecmd))
@@ -184,21 +202,6 @@ for wav in ll:
             print "Encoding failed!"
             print lamecmd
             sys.exit(1)
-
-
-
-# Download cover art if available
-if selectedRelease['cover-art-archive']['front'] != 'false':
-    frontURL = "http://coverartarchive.org/release/%s/front" % (selectedRelease['id'])
-    wgetcmd = "wget --progress=bar --output-document=Folder.jpg %s" % (frontURL)
-    status = subprocess.call(shlex.split(wgetcmd))
-    
-    # if not success
-    if status != 0:
-        print "Cover art download failed"
-        print wgetcmd
-        sys.exit(1)
-
 
 
 # Done - eject CD to indicate process finished
