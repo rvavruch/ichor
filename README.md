@@ -48,6 +48,10 @@ Assuming Python 2.7+ is installed
 ## Usage
 1. Insert CD.
 2. Open a terminal and navigate to the directory where the MP3s should be saved to (see [File naming conventions](https://github.com/rvavruch/ichor/blob/master/README.md#file-naming-conventions--directory-structure)).
+    ````bash
+    cd path/to/mp3/directory
+    ````
+
 3. Run Ichor:
 
     ````bash
@@ -78,6 +82,8 @@ If there are multiple artists the track filenames will change to have the track 
 ````bash
 %track number% - %artist name% - %track title%.mp3
 ````
+
+If there is a [pregap track](https://en.wikipedia.org/wiki/Pregap) which is not mentioned in the track list it will be ripped as `%artist name% - 00 - Pregap.mp3` or as appropiate for multiple artists.
 
 ## LAME options
 Ichor uses the LAME present _standard_ (equivalent to the old V2 preset) which encodes at VBR of ~190kps. The LAME man page says:
