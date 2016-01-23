@@ -1,13 +1,39 @@
-#!/usr/bin/python
-import sys, subprocess, shlex, os
+#!/usr/bin/env python
 
+"""
+Ichor - The inflexible CD ripper
+https://github.com/rvavruch/ichor
+
+LICENCE:
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+"""
+
+__author__ = "Rudolf Vavruch"
+__copyright__ = "Copyright 2015, Rudolf Vavruch"
+__license__ = "GPL"
+__version__ = "2.2.0"
+__status__ = "Production"
+
+
+import sys, subprocess, shlex, os
 import discid
 import musicbrainzngs
 
 
 # Script details
 scriptName = "Ichor" # The inflexible CD ripper
-scriptVersion = '2.2.0' # see changelog.md for details
+scriptVersion = __version__ # see changelog.md for details
 scriptURL = 'https://github.com/rvavruch/ichor'
 print "%s %s (%s) thinks you're neat!" % (scriptName, scriptVersion, scriptURL)
 
