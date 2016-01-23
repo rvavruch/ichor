@@ -1,3 +1,7 @@
+# 2.2.0
+* Added support for track 0 - [Pregrap](https://en.wikipedia.org/wiki/Pregap) audio
+* User now needs to select one of multiple releases
+
 # 2.1.2
 * Added support for UTF8 track titles
 
