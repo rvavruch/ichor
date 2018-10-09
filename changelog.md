@@ -1,3 +1,6 @@
+# 3.0.1
+* Improved error handling if specified release not found
+
 # 3.0.0
 * Added `-r release-id` option
 * Multiple versions now show MusicBrainz release link
