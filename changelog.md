@@ -1,3 +1,7 @@
+# 3.0.0
+* Added `-r release-id` option
+* Multiple versions now show MusicBrainz release link
+
 # 2.2.0
 * Added support for track 0 - [Pregrap](https://en.wikipedia.org/wiki/Pregap) audio
 * User now needs to select one of multiple releases
