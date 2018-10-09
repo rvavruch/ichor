@@ -22,20 +22,21 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 __author__ = "Rudolf Vavruch"
 __copyright__ = "Copyright 2015, Rudolf Vavruch"
 __license__ = "GPL"
-__version__ = "2.2.0"
+__version__ = "3.0.0"
 __status__ = "Production"
 
 
 import sys, subprocess, shlex, os
 import discid
 import musicbrainzngs
+import argparse
 
 
 # Script details
 scriptName = "Ichor" # The inflexible CD ripper
 scriptVersion = __version__ # see changelog.md for details
 scriptURL = 'https://github.com/rvavruch/ichor'
-print "%s %s (%s) thinks you're neat!" % (scriptName, scriptVersion, scriptURL)
+print "%s %s (%s) thinks you're a good friend!" % (scriptName, scriptVersion, scriptURL)
 
 
 
@@ -66,75 +67,91 @@ except discid.DiscError, e:
 
 
 
-# try to find Audio CD match on MusicBrainz
-print "\nFetching release data for CD ..."
+parser = argparse.ArgumentParser(description='Ichor - The inflexible CD ripper - now with options')
+parser.add_argument('-r', help="MusicBrainz release id. eg. 79b49025-b3a7-48d1-96d0-3ba17bfd23f4")
+args = parser.parse_args()
+
 musicbrainzngs.set_useragent(scriptName, scriptVersion, scriptURL)
 
-try:
-    discReleases = musicbrainzngs.get_releases_by_discid(disc.id, ['artist-credits', 'recordings'], disc.toc_string, False)
-except:
-    print sys.exc_info()
-    sys.exit(2)
+if (args.r is None):
 
-try:
-    discReleases['disc']
-    releaseList = discReleases['disc']['release-list']
-except:
+    # try to find Audio CD match on MusicBrainz
+    print "\nFetching release data for CD ..."
+
     try:
-        discReleases['release-list']
-        releaseList = discReleases['release-list']
+        discReleases = musicbrainzngs.get_releases_by_discid(disc.id, ['artist-credits', 'recordings'], disc.toc_string, False)
     except:
-        print releaseList
         print sys.exc_info()
         sys.exit(2)
 
-numberOfReleases = len(releaseList)
 
-if numberOfReleases == 0:
-    print "This CD is not yet in the MusicBrainz database."
-    print "To continue please add it using the following link:", disc.submission_url
-    sys.exit(0)
-elif numberOfReleases > 1:
-    # if there are multiple releases allow the user to choose one
-    print
-    print "Multiple releases, choose one:\n"
-
-    releaseIdx = 1
-    for release in releaseList:
-        print '#' + str(releaseIdx)
-        print "Artist:", release['artist-credit-phrase'].encode('utf8')
-        print "Title:", release['title'].encode('utf8')
-        
-        printIfSet("Country:", 'country', release, 'Unknown')
-        printIfSet("Date:", 'date', release, '0000')
-            
-        if release['cover-art-archive']['front'] != 'false':
-            print "Cover art: Yes"
-        else:
-            print "Cover art: No"
-            
-        printIfSet("Disambiguation:", 'disambiguation', release, 'None')
-        
-        releaseIdx += 1
-        print
-    
-    releaseChoice = 0
-    releaseOptions = range(1, numberOfReleases+1)
-
-    while releaseChoice not in releaseOptions:
-        userInput = raw_input('Enter release number [1-' + str(numberOfReleases) + ']: ')
+    try:
+        discReleases['disc']
+        releaseList = discReleases['disc']['release-list']
+    except:
         try:
-            releaseChoice = int(userInput)
+            discReleases['release-list']
+            releaseList = discReleases['release-list']
         except:
-            releaseChoice = 0
-    
-    releaseChoice -= 1
-    selectedRelease = releaseList[releaseChoice]
-    print
+            print releaseList
+            print sys.exc_info()
+            sys.exit(2)
+
+    numberOfReleases = len(releaseList)
+
+
+    if numberOfReleases == 0:
+        print "This CD is not yet in the MusicBrainz database."
+        print "To continue please add it using the following link:", disc.submission_url
+        print "Or use -r <release-id> to specify the release to use."
+        sys.exit(0)
+
+    elif numberOfReleases > 1:
+        # if there are multiple releases allow the user to choose one
+        print
+        print "Multiple releases, choose one:\n"
+
+        releaseIdx = 1
+        for release in releaseList:
+            print '#' + str(releaseIdx) + ' https://musicbrainz.org/release/' + release['id']
+            print "Artist:", release['artist-credit-phrase'].encode('utf8')
+            print "Title:", release['title'].encode('utf8')
+            
+            printIfSet("Country:", 'country', release, 'Unknown')
+            printIfSet("Date:", 'date', release, '0000')
+                
+            if release['cover-art-archive']['front'] != 'false':
+                print "Cover art: Yes"
+            else:
+                print "Cover art: No"
+                
+            printIfSet("Disambiguation:", 'disambiguation', release, 'None')
+            
+            releaseIdx += 1
+            print
+        
+        releaseChoice = 0
+        releaseOptions = range(1, numberOfReleases+1)
+
+        while releaseChoice not in releaseOptions:
+            userInput = raw_input('Enter release number [1-' + str(numberOfReleases) + ']: ')
+            try:
+                releaseChoice = int(userInput)
+            except:
+                releaseChoice = 0
+        
+        releaseChoice -= 1
+        selectedRelease = releaseList[releaseChoice]
+        print
+    else:
+        selectedRelease = releaseList[0]
+
 else:
-    selectedRelease = releaseList[0]
 
-
+    releases = musicbrainzngs.get_release_by_id(args.r, ['artist-credits', 'recordings'])
+    selectedRelease = releases['release']
+    print
+    
 
 # determine the number of artists credited
 numberOfArtists = len(selectedRelease['artist-credit'])
@@ -251,3 +268,4 @@ status = subprocess.call(shlex.split("eject"))
 if status != 0:
     print "Failed to eject!"
     sys.exit(1)
+
