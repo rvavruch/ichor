@@ -22,7 +22,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 __author__ = "Rudolf Vavruch"
 __copyright__ = "Copyright 2015, Rudolf Vavruch"
 __license__ = "GPL"
-__version__ = "3.0.0"
+__version__ = "3.0.1"
 __status__ = "Production"
 
 
@@ -148,9 +148,13 @@ if (args.r is None):
 
 else:
 
-    releases = musicbrainzngs.get_release_by_id(args.r, ['artist-credits', 'recordings'])
-    selectedRelease = releases['release']
-    print
+    try:
+        releases = musicbrainzngs.get_release_by_id(args.r, ['artist-credits', 'recordings'])
+        selectedRelease = releases['release']
+        print
+    except musicbrainzngs.musicbrainz.ResponseError:
+        print 'There was a problem fetching the specified release.'
+        sys.exit(2)
     
 
 # determine the number of artists credited
