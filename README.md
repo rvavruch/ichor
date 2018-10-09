@@ -5,9 +5,11 @@ Ichor is a Linux commandline Python script that encodes CDs to high quality MP3s
 
 It fetches album and track details from [MusicBrainz](https://musicbrainz.org), rips the CD with [cdparanoia](https://www.xiph.org/paranoia/), and encodes the result to MP3 with [LAME](http://lame.sf.net). If available it downloads cover art from [Cover Art Archive](https://coverartarchive.org/) and adds it to files as well as the directory.
 
-It is inflexible and single minded in it's task. It takes no parameters, it has no options.
+It is inflexible and single minded in it's task. It takes no parameters, it has no options&dagger;.
 
 *Just run it, when the CD ejects it is done.*
+
+_&dagger; as of v3.0.0 Ichor has one option -r to specify a MusicBrainz release-id._
 
 ## Ichor is not for you if ...
 * Want to rip homemade compilation CDs (Ichor requires the album details to be on MusicBrainz).
@@ -66,6 +68,17 @@ Assuming Python 2.7+ is installed
     1. If the CD is not recognised by MusicBrainz, Ichor will quit and print a URL you can use to add it to MusicBrainz. Once the CD has been added to MusicBrainz, run Ichor again.
     2. If there are multiple releases for the CD found, you will be asked to choose one. Recommedation is to choose one with cover art if everything else is the same.
 4. Once Ichor is finished it will eject the CD.
+
+### Specifying a MusicBrainz release id (-r option)
+`Added in v3.0.0:` if Ichor cannot find your CD in MusicBrainz, you can specify a MusicBrainz release to use with the `-r` option.
+
+For example https://musicbrainz.org/release/23d752fa-d27c-33bf-ab33-aff5fb47d507 is the link to a Portishead release. To use this specific release when ripping:
+
+````bash
+path/to/ichor.py -r 23d752fa-d27c-33bf-ab33-aff5fb47d507
+````
+
+Using this option will cause Ichor to skip over searching for your CD on MusicBrainz and will start ripping immeditately.
 
 ## File naming conventions & directory structure
 Ichor will create the following directory structure and filenames:
